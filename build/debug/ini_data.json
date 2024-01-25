@@ -1,0 +1,135 @@
+{
+    "name": "1-1",
+    "axis symmetry": true,
+    "layers count": 3,
+    "subdivisions": [
+        10,
+        10,
+        10
+    ],
+    "thickness": [
+        0.005,
+        0.01,
+        0.02
+    ],
+    "angles": [
+        60,
+        180,
+        360
+    ],
+    "materials": [
+        "yt3",
+        "12h18",
+        "karbolon"
+    ],
+    "solve time": 60,
+    "solve time step": 0.1,
+    "output time step": 1.0,
+    "output times": [
+        10,
+        20,
+        30
+    ],
+    "fuel": "nikag",
+    "initial radius": 0.05,
+    "throat radius": 0.3,
+    "pressure": [
+        [
+            0,
+            30,
+            60
+        ],
+        [
+            100000,
+            1000000,
+            100000
+        ]
+    ],
+    "blayer length": 0.5,
+    "flow type": "supersonic",
+    "boundary left": {
+        "alpha": [
+            [
+                0
+            ],
+            [
+                8000
+            ]
+        ],
+        "te": [
+            [
+                0
+            ],
+            [
+                2300
+            ]
+        ],
+        "trad": [
+            [
+                0
+            ],
+            [
+                2300
+            ]
+        ],
+        "eps": [
+            [
+                0
+            ],
+            [
+                0.5
+            ]
+        ],
+        "q": [
+            [
+                273.0
+            ],
+            [
+                0.0
+            ]
+        ]
+    },
+    "boundary right": {
+        "alpha": [
+            [
+                0
+            ],
+            [
+                2000
+            ]
+        ],
+        "te": [
+            [
+                0
+            ],
+            [
+                2300
+            ]
+        ],
+        "trad": [
+            [
+                0
+            ],
+            [
+                2300
+            ]
+        ],
+        "eps": [
+            [
+                0
+            ],
+            [
+                0.5
+            ]
+        ],
+        "q": [
+            [
+                273.0
+            ],
+            [
+                0.0
+            ]
+        ]
+    },
+    "initial temp": 313
+}

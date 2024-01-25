@@ -1,0 +1,4 @@
+/media/sergio/T7 Shield/WorkSpace/1dTherm/build/CMakeFiles/database.dir
+/media/sergio/T7 Shield/WorkSpace/1dTherm/build/CMakeFiles/tests.dir
+/media/sergio/T7 Shield/WorkSpace/1dTherm/build/CMakeFiles/edit_cache.dir
+/media/sergio/T7 Shield/WorkSpace/1dTherm/build/CMakeFiles/rebuild_cache.dir

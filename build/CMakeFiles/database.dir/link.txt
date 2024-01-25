@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/database.dir/src/main_base.cpp.o CMakeFiles/database.dir/src/fuel.cpp.o CMakeFiles/database.dir/src/material.cpp.o CMakeFiles/database.dir/src/common.cpp.o -o debug/database 
