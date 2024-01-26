@@ -69,6 +69,7 @@
 // };
 
 #pragma once
+#include <deque>
 
 #include "ini_data.h"
 #include "logger.h"
@@ -87,7 +88,7 @@ class MainSolve {
   std::vector<double> F;
   double lambda, lambda_l, lambda_r, ro, cp, dx, t_step, a, te, eps, trad, q;
   size_t iter = 0;
-  std::list<double> times_output;
+  std::deque<double> times_output;
   std::stringstream log;
 
  public:

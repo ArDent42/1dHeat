@@ -41,6 +41,7 @@ void MainSolve::ab_0() {
   cp = mesh_.GetVolumes().front().cp_sr_;
   ro = mesh_.GetVolumes().front().ro_sr_;
   t_step = ini_.GetSolverSettings().solve_timestep;
+  dx = mesh_.GetVolumes().front().dx_right_ * 2.0;
   double r = mesh_.GetVolumes().front().r_right_;
   a = math::Linterp(ini_.GetBoundaryTable().heat_left.alpha,
                     mesh_.GetVolumes().front().t_curr_);
@@ -70,7 +71,7 @@ void MainSolve::ab_i_impl() {
     lambda_r = mesh_.GetVolumes()[i].l_eff_right_;
     cp = mesh_.GetVolumes()[i].cp_sr_;
     ro = mesh_.GetVolumes()[i].ro_sr_;
-    dx = mesh_.GetVolumes()[i].dx_;
+    dx = mesh_.GetVolumes()[i].dx_left_ + mesh_.GetVolumes()[i].dx_right_;
     t_step = ini_.GetSolverSettings().solve_timestep;
     double r_l = mesh_.GetVolumes()[i].r_left_;
     double r_r = mesh_.GetVolumes()[i].r_right_;
@@ -151,6 +152,7 @@ double MainSolve::Max_N() {
 
 void MainSolve::solve_impl(bool logging) {
   double max, max_1, max_N, time = 0.0, prev_time = 0.0;
+  // mesh_.PrintGeomDebug(std::cout);
   while ((ini_.GetSolverSettings().solve_time - time) > EPS) {
     prev_time = time;
     time += ini_.GetSolverSettings().solve_timestep;
@@ -175,6 +177,7 @@ void MainSolve::solve_impl(bool logging) {
       times_output.pop_front();
     }
   }
+  // mesh_.PrintThermDebug(std::cout);
   mesh_.PrintGeomDebug(std::cout);
 }
 

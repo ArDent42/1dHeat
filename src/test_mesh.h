@@ -11,8 +11,8 @@ void TestMesh() {
   base::Database database("ini_data");
   Mesh mesh(database, ini);
   mesh.UpdateVolumeProps();
-  mesh.PrintGeom(std::cout);
-  mesh.PrintTherm(std::cout);
+  mesh.PrintGeomDebug(std::cout);
+  mesh.PrintThermDebug(std::cout);
 }
 
 // void TestLeff() {

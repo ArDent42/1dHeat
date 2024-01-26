@@ -16,16 +16,11 @@
 #include "material.h"
 #include "math.h"
 
-struct Layer {
-  double thickness;
-  double angle;
-  uint num_subdiv;
-  const material::Material* mat;
-};
-
 struct Volume {
   double x_;
-  double dx_ = 0.0;
+  double dx_left_ = 0.0;
+  double dx_right_ = 0.0;
+
   double t_curr_;
   double t_prev_step_;
   double t_prev_iter_;
@@ -38,17 +33,14 @@ struct Volume {
   double cp_sr_ = 0.0;
   double ro_sr_ = 0.0;
 
-  Volume* volume_left_ = nullptr;
-  Volume* volume_right_ = nullptr;
-
-  Layer* layer_left_ = nullptr;
-  Layer* layer_right_ = nullptr;
+  const material::Material* mat_left_ = nullptr;
+  const material::Material* mat_right_ = nullptr;
 
   Volume(double x, double t)
       : x_(x), t_curr_(t), t_prev_iter_(t), t_prev_step_(t) {}
 
-  double LambdaEff(Volume* volume, Layer* layer) const;
-  double RoCpIntegral(Volume* volume, Layer* layer,
+  double LambdaEff(const material::Material* mat, const Volume* vol) const;
+  double RoCpIntegral(const material::Material* mat, const Volume* vol,
                       material::Property prop) const;
 
   void CalcProps();
@@ -57,7 +49,6 @@ struct Volume {
 class Mesh {
  protected:
   std::vector<Volume> volumes_;
-  std::vector<Layer> layers_;
   const base::Database& database_;
   const IniData& ini_data_;
 

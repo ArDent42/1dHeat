@@ -13,6 +13,7 @@ void TestSolver() {
   Mesh mesh(base, ini);
   logger.Domain(ini.GetDomainSettings());
   logger.InitialState(ini.GetInitialState());
-  MainSolve solver(mesh, ini, logger);
+  Results res;
+  MainSolve solver(mesh, ini, res, logger);
   solver.solve_impl();
 }
