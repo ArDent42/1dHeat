@@ -47,27 +47,30 @@
 #define LOG_DURATION_STREAM(x, y) LogDuration UNIQUE_VAR_NAME_PROFILE(x, y)
 
 class LogDuration {
-public:
-	// заменим имя типа std::chrono::steady_clock
-	// с помощью using для удобства
-	using Clock = std::chrono::steady_clock;
+ public:
+  // заменим имя типа std::chrono::steady_clock
+  // с помощью using для удобства
+  using Clock = std::chrono::steady_clock;
 
-	LogDuration(std::string_view id, std::ostream &dst_stream = std::cerr) :
-			id_(id), dst_stream_(dst_stream) {
-	}
+  LogDuration(std::string_view id, std::ostream &dst_stream = std::cerr)
+      : id_(id), dst_stream_(dst_stream) {}
 
-	~LogDuration() {
-		using namespace std::chrono;
-		using namespace std::literals;
+  void Start() { start_time_ = Clock::now(); }
+  void Stop() {
+    auto end_time = Clock::now();
+    dur_ += end_time - start_time_;
+  }
 
-		const auto end_time = Clock::now();
-		const auto dur = end_time - start_time_;
-		dst_stream_ << id_ << ": "sv << duration_cast<milliseconds>(dur).count()
-				<< " ms"sv << std::endl;
-	}
+  ~LogDuration() {
+    using namespace std::chrono;
+    using namespace std::literals;
+    dst_stream_ << id_ << ": "sv << duration_cast<milliseconds>(dur_).count()
+                << " ms"sv << std::endl;
+  }
 
-private:
-	const std::string id_;
-	const Clock::time_point start_time_ = Clock::now();
-	std::ostream &dst_stream_;
+ private:
+  const std::string id_;
+  Clock::time_point start_time_;
+  Clock::duration dur_{};
+  std::ostream &dst_stream_;
 };

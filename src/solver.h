@@ -89,6 +89,7 @@ class MainSolve {
   double lambda, lambda_l, lambda_r, ro, cp, dx, t_step, a, te, eps, trad, q;
   size_t iter = 0;
   std::deque<double> times_output;
+  double out_time_;
   std::stringstream log;
 
  public:
@@ -102,5 +103,5 @@ class MainSolve {
   double Max();
   void solve_impl(bool logging = 0);
   void Print(std::ostream& out) const;
-  void AddResults(double time);
+  void AddResults(double prev_time, double time, double curr_time);
 };

@@ -8,6 +8,14 @@
 #include <vector>
 
 #include "common.h"
+#include "log_duration.h"
+
+extern LogDuration dur_res_write;
+extern LogDuration dur_solver;
+extern LogDuration dur_prevsteps_update;
+extern LogDuration dur_volumeprops_update;
+extern LogDuration dur_abi;
+extern LogDuration dur_t_calc;
 
 MainSolve::MainSolve(Mesh& mesh, const IniData& ini, Results& res, Logger& log)
     : mesh_(mesh), ini_(ini), res_(res), log_(log) {
@@ -18,11 +26,15 @@ MainSolve::MainSolve(Mesh& mesh, const IniData& ini, Results& res, Logger& log)
   B.resize(size);
   C.resize(size);
   F.resize(size);
+
+  out_time_ = ini_.GetSolverSettings().output_timestep;
+
   for (double time = ini_.GetSolverSettings().output_timestep;
-       (ini_.GetSolverSettings().solve_time - time) > EPS;
+       ini_.GetSolverSettings().solve_time >= time;
        time += ini_.GetSolverSettings().output_timestep) {
     times_output.push_back(time);
   }
+
   if (ini_.GetSolverSettings().output_times) {
     std::copy(ini_.GetSolverSettings().output_times->begin(),
               ini_.GetSolverSettings().output_times->end(),
@@ -152,33 +164,62 @@ double MainSolve::Max_N() {
 
 void MainSolve::solve_impl(bool logging) {
   double max, max_1, max_N, time = 0.0, prev_time = 0.0;
-  // mesh_.PrintGeomDebug(std::cout);
   while ((ini_.GetSolverSettings().solve_time - time) > EPS) {
     prev_time = time;
     time += ini_.GetSolverSettings().solve_timestep;
     log_.Time(time);
+    dur_prevsteps_update.Start();
     mesh_.TPrevStepUpdate();
+    dur_prevsteps_update.Stop();
+    dur_volumeprops_update.Start();
     mesh_.UpdateVolumeProps();
+    dur_volumeprops_update.Stop();
     iter = 0;
     do {
       ++iter;
+      dur_prevsteps_update.Start();
       mesh_.TPrevIterUpdate();
+      dur_prevsteps_update.Stop();
       ab_0();
+      dur_abi.Start();
       ab_i_impl();
+      dur_abi.Stop();
       T_N();
+      dur_t_calc.Start();
       T();
+      dur_t_calc.Stop();
       max = Max();
       max_1 = Max_1();
       max_N = Max_N();
       log_.SimpleIter(iter, max, max_1, max_N, mesh_);
     } while (max >= EPS_ITER || max_1 >= EPS_ITER || max_N >= EPS_ITER);
-    if (times_output.front() >= prev_time && times_output.front() <= time) {
-      // AddResults(times_output.front());
-      times_output.pop_front();
+    // if (times_output.front() > prev_time && times_output.front() <= time) {
+    //   AddResults(prev_time, times_output.front(), time);
+    //   times_output.pop_front();
+    // }
+    dur_res_write.Start();
+    if (out_time_ > prev_time && out_time_ <= time) {
+      AddResults(prev_time, out_time_, time);
+      out_time_ += ini_.GetSolverSettings().output_timestep;
+    }
+    dur_res_write.Stop();
+  }
+}
+
+void MainSolve::AddResults(double prev_time, double time, double curr_time) {
+  res_.time.push_back(time);
+  res_.bound_temp_distr.push_back({});
+  TempCoord temp_coord;
+  for (const Volume& vol : mesh_.GetVolumes()) {
+    temp_coord.x.push_back(vol.x_);
+    temp_coord.temp.push_back(math::Linterp(
+        prev_time, curr_time, vol.t_prev_step_, vol.t_curr_, time));
+    if (vol.mat_left_ != vol.mat_right_) {
+      res_.bound_temp_distr.back().push_back(math::Linterp(
+          prev_time, curr_time, vol.t_prev_step_, vol.t_curr_, time));
     }
   }
-  // mesh_.PrintThermDebug(std::cout);
-  mesh_.PrintGeomDebug(std::cout);
+  res_.temp_coord_distr.push_back(std::move(temp_coord));
 }
 
 // void MainSolve::AddResults(double time) {

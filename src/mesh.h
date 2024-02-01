@@ -82,44 +82,48 @@ class Mesh {
   void Print(std::ostream& out) const;
 };
 
-struct Results {};
-
-class BaseVolume {
- protected:
-  double x_;
-  double dx_ = 0.0;
-  double ro_ = 0.0;
-  double cp_ = 0.0;
-  double t_curr_;
-  double t_prev_step_;
-  double t_prev_iter_;
-
- public:
-  BaseVolume(double x, double t)
-      : x_(x), t_curr_(t), t_prev_iter_(t), t_prev_step_(t) {}
-
-  virtual double LambdaEff() const;
-  virtual double RoCpIntegral() const;
-  virtual void CalcProps();
+struct TempCoord {
+  std::list<double> x;
+  std::list<double> temp;
 };
 
-class SideVolume : public BaseVolume {
- private:
-  material::Material* mat_ = nullptr;
-  double l_eff_ = 0.0;
-  double r_ = 0.0;
-
- public:
-  SideVolume(double x, double t, material::Material* mat)
-      : BaseVolume(x, t), mat_(mat) {}
-};
-
-class InnerVolume : public BaseVolume {
- private:
-  material::Material* mat_ = nullptr;
-  double l_eff_left_ = 0.0;
-  double l_eff_right_ = 0.0;
-  double r_left_ = 0.0;
-  double r_right_ = 0.0;
-  double r = 0.0;
+struct Results {
+  std::list<double> time;
+  std::list<TempCoord> temp_coord_distr;
+  std::list<std::list<double>> bound_temp_distr;
+  void PrintBoundsDistr(std::ostream& os) const {
+    int w = 10;
+    auto time_it = time.begin();
+    auto distr_it = bound_temp_distr.begin();
+    while (time_it != time.end()) {
+      os << std::setw(w) << std::fixed << std::setprecision(2) << *time_it;
+      for (double val : *distr_it) {
+        os << std::setw(w) << std::fixed << std::setprecision(2) << val;
+      }
+      os << '\n';
+      ++time_it;
+      ++distr_it;
+    }
+  }
+  void PrintXDistr(std::ostream& os) const {
+    int w = 10;
+    auto time_it = time.begin();
+    auto coord_it = temp_coord_distr.begin();
+    while (time_it != time.end()) {
+      os << "Time: " << std::fixed << std::setprecision(3) << *time_it << " sec"
+         << '\n';
+      auto x_it = coord_it->x.begin();
+      auto temp_it = coord_it->temp.begin();
+      os << std::setw(w) << "x, mm" << std::setw(w) << "T, K" << '\n';
+      while (x_it != coord_it->x.end()) {
+        os << std::setw(w) << std::fixed << std::setprecision(2)
+           << *x_it * 1000.0 << std::setw(w) << std::fixed
+           << std::setprecision(2) << *temp_it << '\n';
+        ++x_it;
+        ++temp_it;
+      }
+      ++time_it;
+      ++coord_it;
+    }
+  }
 };

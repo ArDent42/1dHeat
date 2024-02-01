@@ -9,7 +9,7 @@
 
 #include "nlohmann/json.hpp"
 
-const double EPS = 0.0000001;
+const double EPS = 0.00001;
 const double EPS_ITER = 1E-4;
 
 namespace parsing {
@@ -28,7 +28,7 @@ namespace math {
 
 const double MEGA = 1000000;
 const double KILO = 1000;
-const uint N_INTEGRATION = 20;
+const uint N_INTEGRATION = 5;
 const double SIGMA = 5.67E-08;
 
 double Linterp(double x1, double x2, double y1, double y2, double x);

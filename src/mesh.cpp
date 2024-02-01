@@ -1,6 +1,7 @@
 #include "mesh.h"
 
 #include <cmath>
+#include <execution>
 
 double Volume::LambdaEff(const material::Material* mat,
                          const Volume* vol) const {
@@ -86,6 +87,7 @@ void Mesh::InitializeMesh(const IniData::Domain& domain,
   }
 
   dxCalc();
+
   if (ini_data_.GetDomainSettings().axis_symmetry) {
     rCalc();
   }
@@ -125,9 +127,11 @@ void Mesh::rCalc() {
 }
 
 void Mesh::UpdateVolumeProps() {
-  for (Volume& vol : volumes_) {
-    vol.CalcProps();
-  }
+  // for (Volume& vol : volumes_) {
+  //   vol.CalcProps();
+  // }
+  for_each(std::execution::par, volumes_.begin(), volumes_.end(),
+           [](Volume& vol) { vol.CalcProps(); });
 }
 
 void Mesh::TPrevStepUpdate() {

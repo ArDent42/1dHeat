@@ -3,9 +3,9 @@
     "axis symmetry": false,
     "layers count": 3,
     "subdivisions": [
-        10,
-        10,
-        10
+        100,
+        100,
+        100
     ],
     "thickness": [
         0.01,
@@ -23,13 +23,9 @@
         "ntm2"
     ],
     "solve time": 60,
-    "solve time step": 0.1,
-    "output time step": 1.0,
-    "output times": [
-        10,
-        20,
-        30
-    ],
+    "solve time step": 0.01,
+    "output time step": 0.5,
+    "output times": [],
     "fuel": "nikag",
     "initial radius": 0.0,
     "throat radius": 0.3,
