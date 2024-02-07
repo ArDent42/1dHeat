@@ -20,7 +20,7 @@ void TestSolver() {
   dur_solver.Start();
   solver.solve_impl();
   dur_solver.Stop();
-  res.PrintBoundsDistr(ss);
+  res.PrintBoundsDistr(ss, ini);
   res.PrintXDistr(ss);
   std::ofstream out("res.txt");
   out << ss.str();

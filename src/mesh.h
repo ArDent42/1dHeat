@@ -91,10 +91,19 @@ struct Results {
   std::list<double> time;
   std::list<TempCoord> temp_coord_distr;
   std::list<std::list<double>> bound_temp_distr;
-  void PrintBoundsDistr(std::ostream& os) const {
-    int w = 10;
+  void PrintBoundsDistr(std::ostream& os, const IniData& ini) const {
+    int w = 20;
     auto time_it = time.begin();
     auto distr_it = bound_temp_distr.begin();
+    os.setf(std::ios_base::internal);
+    os << std::setw(w) << "t, s" << std::setw(w)
+       << "liquid - " + ini.GetDomainSettings().mat_names.front();
+    for (size_t i = 0; i < ini.GetDomainSettings().mat_names.size() - 1; ++i) {
+      os << std::setw(w)
+         << ini.GetDomainSettings().mat_names[i] + " - " +
+                ini.GetDomainSettings().mat_names[i + 1];
+    }
+    os << '\n';
     while (time_it != time.end()) {
       os << std::setw(w) << std::fixed << std::setprecision(2) << *time_it;
       for (double val : *distr_it) {

@@ -127,11 +127,11 @@ void Mesh::rCalc() {
 }
 
 void Mesh::UpdateVolumeProps() {
-  // for (Volume& vol : volumes_) {
-  //   vol.CalcProps();
-  // }
-  for_each(std::execution::par, volumes_.begin(), volumes_.end(),
-           [](Volume& vol) { vol.CalcProps(); });
+  for (Volume& vol : volumes_) {
+    vol.CalcProps();
+  }
+  // for_each(std::execution::par, volumes_.begin(), volumes_.end(),
+  //          [](Volume& vol) { vol.CalcProps(); });
 }
 
 void Mesh::TPrevStepUpdate() {
