@@ -1,0 +1,47 @@
+[
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/common.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/common.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/common.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/fuel.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/fuel.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/fuel.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/material.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/material.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/material.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/tests.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/tests.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/tests.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/boundary_cond.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/boundary_cond.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/boundary_cond.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/flow.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/flow.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/flow.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/mesh.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/mesh.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/mesh.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/data_base.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/data_base.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/data_base.cpp"
+},
+{
+  "directory": "/media/sergio/T7 Shield/WorkSpace/1dTherm",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/tests.dir/src/solver.cpp.o -c \"/media/sergio/T7 Shield/WorkSpace/1dTherm/src/solver.cpp\"",
+  "file": "/media/sergio/T7 Shield/WorkSpace/1dTherm/src/solver.cpp"
+}
+]
