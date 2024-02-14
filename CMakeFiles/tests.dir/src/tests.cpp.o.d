@@ -364,6 +364,8 @@ CMakeFiles/tests.dir/src/tests.cpp.o: \
  /usr/include/c++/11/pstl/glue_memory_impl.h \
  /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/log_duration.h \
  /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/test_solve.h \
+ /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/handler.h \
+ /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/boundary_cond.h \
  /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/solver.h \
  /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
  /usr/include/c++/11/bits/deque.tcc

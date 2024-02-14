@@ -2,21 +2,21 @@
 
 namespace heat_exchange {
 
-double HeatExchange::CalcAlphaAvd(IniDataAvd ini_data) const {
+double HeatExchange::CalcAlphaAvd() const {
   double ro = 1 / fuel_props_Tw_.at(fuel::FuelProp::v);
   double mu = fuel_props_Tw_.at(fuel::FuelProp::mu);
   double lt;
   double cp;
-  if (ini_data.flow_type == flow::FlowType::subsonic) {
+  if (ini_.GetBoundaryTable().flow_type == flow::FlowType::subsonic) {
     cp = fuel_props_Tw_.at(fuel::FuelProp::cp_eq);
     lt = fuel_props_Tw_.at(fuel::FuelProp::lt_total);
   } else {
     cp = fuel_props_Tw_.at(fuel::FuelProp::cp_fr);
     lt = fuel_props_Tw_.at(fuel::FuelProp::lt_gas);
   }
-  double Re = ro * flow_params_.u * ini_data.s_ef / mu;
+  double Re = ro * flow_params_.u * ini_.GetDomainSettings().blayer_length.value() / mu;
   double Pr = mu * cp / lt;
-  double Te = CalcTe(ini_data);
+  double Te = CalcTe();
   double m = Te / flow_params_.t_static;
   double alpha = 0.0296 * pow(Re, -0.2) * pow(Pr, -0.6) * ro * cp *
                  flow_params_.u * pow((0.9 * flow_params_.t_total / Te), 0.39) *
@@ -41,12 +41,12 @@ double HeatExchange::CalcAlphaCrit(double p, double t_w, double r0, double u,
   double alpha = 0.023 * lt / r0 / 2.0 * pow(Re, 0.8) * pow(Pr, 0.3);
   return alpha;
 }
-double HeatExchange::CalcTe(IniDataAvd ini_data) const {
+double HeatExchange::CalcTe() const {
   double mu = fuel_props_Tstatic_.at(fuel::FuelProp::mu);
   double lt;
   double cp;
   double k = flow_params_.k;
-  if (ini_data.flow_type == flow::FlowType::subsonic) {
+  if (ini_.GetBoundaryTable().flow_type == flow::FlowType::subsonic) {
     cp = fuel_props_Tstatic_.at(fuel::FuelProp::cp_eq);
     lt = fuel_props_Tstatic_.at(fuel::FuelProp::lt_total);
   } else {

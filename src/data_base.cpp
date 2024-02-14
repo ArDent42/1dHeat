@@ -163,7 +163,7 @@ void Database::AddFuel(const std::string &fuel_name,
   fout << res.dump(4);
 }
 
-const fuel::Fuel &Database::GetFuel(const std::string &fuel_name) const {
+const fuel::Fuel &Database::GetFuel() const {
   return *fuel_;
 }
 
@@ -173,7 +173,7 @@ const material::Material &Database::GetMaterial(
 }
 
 void Database::PrintFuel(const std::string &fuel_name, std::ostream &os) const {
-  fuel::Fuel fuel = GetFuel(fuel_name);
+  fuel::Fuel fuel = GetFuel();
   os.setf(std::ios_base::left);
   os << std::setw(8) << "P, MPa" << std::setw(7) << "T, K" << std::endl;
   for (const auto [press, temp] : fuel.GetTotalTemperatures()) {

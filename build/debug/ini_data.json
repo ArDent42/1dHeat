@@ -22,7 +22,7 @@
         "sp33",
         "ntm2"
     ],
-    "solve time": 60,
+    "solve time": 10,
     "solve time step": 0.1,
     "output time step": 0.1,
     "output times": [
@@ -49,7 +49,6 @@
     ],
     "blayer length": 0.5,
     "flow type": "supersonic",
-    "speed": 100.0,
     "boundary left": {
         "alpha": [
             [

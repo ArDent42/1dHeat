@@ -6,14 +6,14 @@
 #include "log_duration.h"
 #include "mesh.h"
 
-void TestMesh() {
-  IniData ini("ini_data");
-  base::Database database("ini_data");
-  Mesh mesh(database, ini);
-  mesh.UpdateVolumeProps();
-  mesh.PrintGeomDebug(std::cout);
-  mesh.PrintThermDebug(std::cout);
-}
+// void TestMesh() {
+//   IniData ini("ini_data");
+//   base::Database database("ini_data");
+//   Mesh mesh(database, ini);
+//   mesh.UpdateVolumeProps();
+//   mesh.PrintGeomDebug(std::cout);
+//   mesh.PrintThermDebug(std::cout);
+// }
 
 // void TestLeff() {
 //   IniData ini("ini_data");

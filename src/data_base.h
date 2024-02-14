@@ -44,7 +44,7 @@ class Database {
   nlohmann::json CreateMaterialEntryTemplate() const;
   void CreateEntryTemplate(const std::string &name, char entry_type) const;
 
-  const fuel::Fuel& GetFuel(const std::string &fuel_name) const;
+  const fuel::Fuel& GetFuel() const;
   const material::Material& GetMaterial(const std::string &mat_name) const;
 
   void PrintFuel(const std::string &fuel_name, std::ostream &os) const;

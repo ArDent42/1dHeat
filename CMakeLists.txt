@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.22)
 
 project(database CXX)
 
+set(CMAKE_BUILD_PARALLEL_LEVEL 0)
+
 set(CMAKE_BINARY_DIR build)
 set(CMAKE_SOURCE_DIR src)
 

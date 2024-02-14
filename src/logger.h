@@ -11,8 +11,8 @@ class Logger {
   std::string output_name;
 
  public:
-  Logger(const std::string& name, bool state)
-      : output_name(name), logging(state) {}
+  Logger(const std::string& name)
+      : output_name(name) {}
 
   void Time(double time) {
     if (logging) {
@@ -70,8 +70,7 @@ class Logger {
     log_ << '\n' << '\n';
   }
 
-  void On() { logging = 1; }
-  void Off() { logging = 1; }
+  void Logging(bool b) { logging = b; }
   ~Logger() {
     std::ofstream fout(output_name);
     fout << log_.str();

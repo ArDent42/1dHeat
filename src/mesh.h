@@ -91,34 +91,29 @@ struct TempToCoord {
 
 struct Results {
   const IniData& ini_;
-  std::string output_path;
   std::vector<double> time;
   std::vector<TempToCoord> temp_coord_distr;
   std::vector<std::vector<double>> bound_temp_distr;
 
-  Results(const IniData& ini) : ini_(ini) {
-    output_path = "output/" + ini.GetDomainSettings().name + "/";
-  }
+  Results(const IniData& ini) : ini_(ini) {}
 
-  void PrintBoundsDistr(std::ostream& os) const {
-    int w = 14;
+  void PrintBoundsDistr(std::ostream& os, const char delimiter) const {
     auto time_it = time.begin();
     auto distr_it = bound_temp_distr.begin();
-    os.setf(std::ios_base::left);
-    os << std::setw(w) << "t, s" << std::setw(w) << "liquid";
+    os << "t, s" << delimiter << "liquid";
     for (size_t i = 0; i < ini_.GetDomainSettings().mat_names.size(); ++i) {
-      os << std::setw(w) << ini_.GetDomainSettings().mat_names[i];
+      os << delimiter << ini_.GetDomainSettings().mat_names[i];
     }
-    os << '\n' << std::setw(w) << ' ';
+    os << '\n';
     for (size_t i = 0; i < ini_.GetDomainSettings().mat_names.size(); ++i) {
-      os << std::setw(w) << ini_.GetDomainSettings().mat_names[i];
+      os << delimiter << ini_.GetDomainSettings().mat_names[i];
     }
-    os << std::setw(w) << "liquid";
+    os << delimiter << "liquid";
     os << '\n';
     while (time_it != time.end()) {
-      os << std::setw(w) << std::fixed << std::setprecision(2) << *time_it;
+      os << std::fixed << std::setprecision(2) << *time_it;
       for (double val : *distr_it) {
-        os << std::setw(w) << std::fixed << std::setprecision(2) << val;
+        os << delimiter << std::fixed << std::setprecision(2) << val;
       }
       os << '\n';
       ++time_it;
@@ -126,20 +121,19 @@ struct Results {
     }
     os << '\n';
   }
-  
-  void PrintXDistr(std::ostream& os) const {
-    int w = 10;
+
+  void PrintXDistr(std::ostream& os, const char delimiter) const {
     auto time_it = time.begin();
     auto coord_it = temp_coord_distr.begin();
     while (time_it != time.end()) {
-      os << "Time: " << std::fixed << std::setprecision(3) << *time_it << " sec"
+      os << "Time: " << std::setprecision(3) << *time_it << " sec"
          << '\n';
       auto x_it = coord_it->x.begin();
       auto temp_it = coord_it->temp.begin();
-      os << std::setw(w) << "x, mm" << std::setw(w) << "T, K" << '\n';
+      os << "x, mm" << delimiter << "T, K" << '\n';
       while (x_it != coord_it->x.end()) {
-        os << std::setw(w) << std::fixed << std::setprecision(2)
-           << *x_it * 1000.0 << std::setw(w) << std::fixed
+        os << std::fixed << std::setprecision(2)
+           << *x_it * 1000.0 << delimiter << std::fixed
            << std::setprecision(2) << *temp_it << '\n';
         ++x_it;
         ++temp_it;
@@ -149,16 +143,16 @@ struct Results {
     }
   }
 
-  void Print(std::ostream& os) {
-    PrintBoundsDistr(os);
-    PrintXDistr(os);
+  void ExportText(std::ostream& os, const char delimiter) {
+    PrintBoundsDistr(os, delimiter);
+    PrintXDistr(os, delimiter);
   }
 
   template <typename X, typename Y>
   void SavePlot(const X& x, const Y& y, const std::string& title,
                 const std::string& label_x, const std::string& label_y,
                 const std::string& output_path) {
-    auto handle = matplot::plot(x, y)->line_width(2.0);
+    matplot::plot(x, y)->line_width(2.0);
     matplot::grid(matplot::on);
     matplot::gca()->minor_grid(true);
     matplot::title(title);
@@ -167,7 +161,7 @@ struct Results {
     matplot::save(output_path + title + ".jpg");
   }
 
-  void ExportTtoT(const IniData& ini) {
+  void ExportTtoT(const IniData& ini, const std::string& output_path) {
     auto it = ini.GetDomainSettings().mat_names.begin();
     std::string path = output_path + "T(t)/";
     for (size_t i = 0; i < bound_temp_distr.front().size(); ++i) {
@@ -189,7 +183,7 @@ struct Results {
     }
   }
 
-  void ExportTtoX(const IniData& ini) {
+  void ExportTtoX(const IniData& ini, const std::string& output_path) {
     auto it = time.begin();
     std::string path = output_path + "T(x)/";
     for (const auto& temp : temp_coord_distr) {
@@ -198,9 +192,9 @@ struct Results {
     }
   }
 
-  void ExportResults(const IniData& ini) {
-    ExportTtoT(ini);
-    ExportTtoX(ini);
+  void ExportResults(const IniData& ini, const std::string& output_path) {
+    ExportTtoT(ini, output_path);
+    ExportTtoX(ini, output_path);
   }
 
   void ShowPlot() const {

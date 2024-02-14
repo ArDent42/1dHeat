@@ -2,6 +2,9 @@
     "files.associations": {
         "numeric": "cpp",
         "*.tcc": "cpp",
-        "complex": "cpp"
-    }
+        "complex": "cpp",
+        "iosfwd": "cpp",
+        "iomanip": "cpp"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }
