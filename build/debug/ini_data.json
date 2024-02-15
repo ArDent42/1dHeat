@@ -22,7 +22,7 @@
         "sp33",
         "ntm2"
     ],
-    "solve time": 10,
+    "solve time": 60,
     "solve time step": 0.1,
     "output time step": 0.1,
     "output times": [
@@ -33,7 +33,7 @@
         50
     ],
     "fuel": "nikag",
-    "initial radius": 0.0,
+    "initial radius": 0.4,
     "throat radius": 0.3,
     "pressure": [
         [
@@ -47,7 +47,7 @@
             100000
         ]
     ],
-    "blayer length": 0.5,
+    "blayer length": 0.1,
     "flow type": "supersonic",
     "boundary left": {
         "alpha": [

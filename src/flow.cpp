@@ -2,66 +2,65 @@
 
 #include <iostream>
 
+#include "common.h"
+
 namespace flow {
 
-void Flow1D::CalcLambda(FlowType flow_type) {
-  double n = 1 / (flow_params_.k - 1.0);
-  double k1 = flow_params_.k + 1.0;
-  double k2 = flow_params_.k - 1.0;
-  double prev_value;
+void Flow1D::CalcLambda() {
+  double n = 1 / (k_ - 1.0);
+  double k1 = k_ + 1.0;
+  double k2 = k_ - 1.0;
+  double prev_value = 1.0;
   do {
-    prev_value = flow_params_.lambda;
-    if (flow_type == FlowType::subsonic) {
-      flow_params_.lambda =
-          1.0 /
-          (pow(k1 / 2.0, n) * pow(1.0 - prev_value * prev_value * k2 / k1, n) *
-           flow_params_.ksi * flow_params_.ksi);
-    } else if (flow_type == FlowType::supersonic) {
-      flow_params_.lambda = k1 / k2 / prev_value -
-                            2 / pow(prev_value, flow_params_.k) / k2 /
-                                pow(flow_params_.ksi, 2 * flow_params_.k - 2);
+    prev_value = lambda_;
+    if (flow_type_ == FlowType::subsonic) {
+      lambda_ =
+          1.0 / (pow(k1 / 2.0, n) *
+                 pow(1.0 - prev_value * prev_value * k2 / k1, n) * ksi_ * ksi_);
+    } else if (flow_type_ == FlowType::supersonic) {
+      lambda_ = k1 / k2 / prev_value -
+                2 / pow(prev_value, k_) / k2 / pow(ksi_, 2 * k_ - 2);
     } else {
-      flow_params_.lambda = 1.0;
+      lambda_ = 1.0;
       return;
     }
-  } while (std::abs(flow_params_.lambda - prev_value) > 0.00001);
+  } while (std::abs(lambda_ - prev_value) > EPS);
 }
 
 void Flow1D::CalcPressStatic() {
-  flow_params_.p_static =
-      flow_params_.p_total *
-      pow((1 - flow_params_.lambda * flow_params_.lambda *
-                   (flow_params_.k - 1) / (flow_params_.k + 1)),
-          (flow_params_.k / (flow_params_.k - 1)));
+  p_static_ = p_total_ * pow((1 - lambda_ * lambda_ * (k_ - 1) / (k_ + 1)),
+                             (k_ / (k_ - 1)));
 }
 
 void Flow1D::CalcTempStatic() {
-  flow_params_.t_static = flow_params_.t_total *
-                          (1 - flow_params_.lambda * flow_params_.lambda *
-                                   (flow_params_.k - 1) / (flow_params_.k + 1));
+  t_static_ = t_total_ * (1 - lambda_ * lambda_ * (k_ - 1) / (k_ + 1));
 }
 
 void Flow1D::CalcVelocity() {
   auto fuel_props_static =
-      fuel_.GetProperties(flow_params_.p_static, flow_params_.t_static);
-  double a = pow(flow_params_.k * flow_params_.p_static *
-                     fuel_props_static.at(fuel::FuelProp::v),
-                 0.5);
-  flow_params_.mach = flow_params_.lambda * pow(2 / (flow_params_.k + 1), 0.5) /
-                      pow(1 - (flow_params_.k - 1) / (flow_params_.k + 1) *
-                                  flow_params_.lambda * flow_params_.lambda,
-                          0.5);
-  flow_params_.u = a * flow_params_.mach;
+      fuel_.GetProperties(p_static_, t_static_);
+  double a =
+      pow(k_ * p_static_ * fuel_props_static.at(fuel::FuelProp::v),
+          0.5);
+  mach_ =
+      lambda_ * pow(2 / (k_ + 1), 0.5) /
+      pow(1 - (k_ - 1) / (k_ + 1) * lambda_ * lambda_,
+          0.5);
+  u_ = a * mach_;
 }
 
 void Flow1D::CalcFlowParams(double p_total, double ksi, FlowType flow_type) {
-  flow_params_.p_total = p_total;
-  flow_params_.ksi = ksi;
-  flow_params_.t_total = fuel_.GetTotalTemp(p_total);
-  flow_params_.k =
-      fuel_.GetProperties(flow_params_.p_total, flow_params_.t_total)
+  if (std::abs(p_total_ - p_total) <= EPS && std::abs(ksi_ - ksi) <= EPS && flow_type_ == flow_type) {
+    return;
+  }
+  flow_type_ = flow_type;
+  p_total_ = p_total;
+  ksi_ = ksi;
+  t_total_ = fuel_.GetTotalTemp(p_total);
+  k_ =
+      fuel_.GetProperties(p_total_, t_total_)
           .at(fuel::FuelProp::k_eq);
-  CalcLambda(flow_type);
+  CalcLambda();
   CalcPressStatic();
   CalcTempStatic();
   CalcVelocity();

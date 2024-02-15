@@ -74,12 +74,14 @@
 #include "ini_data.h"
 #include "logger.h"
 #include "mesh.h"
+#include "boundary_cond.h"
 
 class MainSolve {
   Mesh& mesh_;
   const IniData& ini_;
   Logger& log_;
   Results& res_;
+  heat_exchange::HeatExchange& heat_;
   std::vector<double> alfa;
   std::vector<double> beta;
   std::vector<double> A;
@@ -93,7 +95,7 @@ class MainSolve {
   std::stringstream log;
 
  public:
-  MainSolve(Mesh& mesh, const IniData& ini, Results& res, Logger& log);
+  MainSolve(const IniData& ini, Mesh& mesh, heat_exchange::HeatExchange& heat, Results& res, Logger& log);
   void ab_0();
   void ab_i_impl();
   void T_N();

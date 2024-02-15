@@ -1,45 +1,59 @@
-#ifndef FLOW_H_
-#define FLOW_H_
+#pragma once
 #include <cmath>
 
 #include "fuel.h"
 
 namespace flow {
 
-enum FlowType {
-  subsonic,
-  sonic,
-  supersonic,
-};
-
-struct FlowParams {
-  double t_total;
-  double t_static;
-  double p_total;
-  double p_static;
-  double u;
-  double mach;
-  double k;
-  double lambda = 1.0;
-  double ksi;
-};
-
 class Flow1D {
+ public:
+  enum FlowType {
+    subsonic,
+    sonic,
+    supersonic,
+  };
+
  private:
-  void CalcLambda(FlowType flow_type);
+  double t_total_ = 0.0;
+  double t_static_ = 0.0;
+  double p_total_ = 0.0;
+  double p_static_ = 0.0;
+  double u_ = 0.0;
+  double mach_ = 0.0;
+  double k_ = 0.0;
+  double lambda_ = 1.0;
+  double ksi_ = 0.0;
+
+  FlowType flow_type_;
+
+  void CalcLambda();
   void CalcPressStatic();
   void CalcTempStatic();
   void CalcVelocity();
 
   const fuel::Fuel &fuel_;
-  FlowParams flow_params_;
 
  public:
   Flow1D(const fuel::Fuel &fuel) : fuel_(fuel) {}
-  void CalcFlowParams(double p_total, double ksi, FlowType flow_type) {}
-  const FlowParams &GetParams() const { return flow_params_; }
+  void CalcFlowParams(double p_total, double ksi, FlowType flow_type);
+  double p_static() const {
+    return p_static_;
+  }
+  double t_static() const {
+    return t_static_;
+  }
+  double t_total() const {
+    return t_total_;
+  }
+  double k() const {
+    return k_;
+  }
+  double mach() const {
+    return mach_;
+  }
+  double u() const {
+    return u_;
+  }
 };
 
 }  // namespace flow
-
-#endif

@@ -16,7 +16,7 @@ class Logger {
 
   void Time(double time) {
     if (logging) {
-      log_ << "Time: " << time << " s" << '\n';
+      log_ << '\n' << "Time: " << time << " s" << '\n';
     }
   }
   void SimpleIter(size_t iter, double max, double max_1, double max_N,

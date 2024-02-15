@@ -17,8 +17,10 @@ extern LogDuration dur_volumeprops_update;
 extern LogDuration dur_abi;
 extern LogDuration dur_t_calc;
 
-MainSolve::MainSolve(Mesh& mesh, const IniData& ini, Results& res, Logger& log)
-    : mesh_(mesh), ini_(ini), res_(res), log_(log) {
+MainSolve::MainSolve(const IniData& ini, Mesh& mesh,
+                     heat_exchange::HeatExchange& heat, Results& res,
+                     Logger& log)
+    : ini_(ini), mesh_(mesh), heat_(heat), res_(res), log_(log) {
   size_t size = mesh_.GetVolumes().size();
   alfa.resize(size);
   beta.resize(size);
@@ -168,41 +170,33 @@ void MainSolve::solve_impl(bool logging) {
     prev_time = time;
     time += ini_.GetSolverSettings().solve_timestep;
     log_.Time(time);
-    dur_prevsteps_update.Start();
     mesh_.TPrevStepUpdate();
-    dur_prevsteps_update.Stop();
-    dur_volumeprops_update.Start();
     mesh_.UpdateVolumeProps();
-    dur_volumeprops_update.Stop();
     iter = 0;
+    if (ini_.GetInitialState().pressure.has_value()) {
+      double pressure =
+          math::Linterp(ini_.GetInitialState().pressure.value(), time);
+      heat_exchange::Result res = heat_.CalcAutomatic(
+          pressure, mesh_.GetVolumes().front().t_prev_step_);
+      log_.Msg("Pressure: " + std::to_string(pressure));
+      log_.Msg((std::stringstream{} << res).str());
+    }
     do {
       ++iter;
-      dur_prevsteps_update.Start();
       mesh_.TPrevIterUpdate();
-      dur_prevsteps_update.Stop();
       ab_0();
-      dur_abi.Start();
       ab_i_impl();
-      dur_abi.Stop();
       T_N();
-      dur_t_calc.Start();
       T();
-      dur_t_calc.Stop();
       max = Max();
       max_1 = Max_1();
       max_N = Max_N();
       log_.SimpleIter(iter, max, max_1, max_N, mesh_);
     } while (max >= EPS_ITER || max_1 >= EPS_ITER || max_N >= EPS_ITER);
-    // if (times_output.front() > prev_time && times_output.front() <= time) {
-    //   AddResults(prev_time, times_output.front(), time);
-    //   times_output.pop_front();
-    // }
-    dur_res_write.Start();
     if (out_time_ > prev_time && out_time_ <= time) {
       AddResults(prev_time, out_time_, time);
       out_time_ += ini_.GetSolverSettings().output_timestep;
     }
-    dur_res_write.Stop();
   }
 }
 

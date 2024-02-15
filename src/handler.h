@@ -27,16 +27,16 @@ class Handler {
     logger_ = std::make_unique<Logger>(output_path_ + "log.txt");
     database_ = std::make_unique<base::Database>(*ini_data_);
     flow_ = std::make_unique<flow::Flow1D>(database_->GetFuel());
-    heat_exchange_ = std::make_unique<heat_exchange::HeatExchange>(*ini_data_,
-        database_->GetFuel());
+    heat_exchange_ = std::make_unique<heat_exchange::HeatExchange>(
+        *ini_data_, database_->GetFuel(), *flow_);
     mesh_ = std::make_unique<Mesh>(*database_, *ini_data_);
     res_ = std::make_unique<Results>(*ini_data_);
-    solver_ = std::make_unique<MainSolve>(*mesh_, *ini_data_, *res_, *logger_);
+    solver_ = std::make_unique<MainSolve>(*ini_data_, *mesh_, *heat_exchange_, *res_, *logger_);
     std::filesystem::create_directories(output_path_);
   }
 
-  heat_exchange::Result CalcAvd() {
-    return heat_exchange_->Calc(*ini_data_, heat_exchange::CalcType::avd);
+  heat_exchange::Result HeatAvd(double pressure, double t_wall) {
+    return heat_exchange_->CalcAutomatic(pressure, t_wall);
   }
 
   Handler& Logging(bool b) {

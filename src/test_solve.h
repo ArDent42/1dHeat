@@ -29,6 +29,6 @@ extern LogDuration dur_solver;
 
 void TestSolver() {
   Handler handler("ini_data", true);
-  heat_exchange::Result res_avd = handler.CalcAvd();
-  handler.Logging(true).SolveiImpl().ExportResults().ExportPlots();
+
+  handler.Logging(true).SolveiImpl().ExportResults();
 }

@@ -50,7 +50,7 @@ class IniData {
   };
 
   struct BoundaryConditions {
-    flow::FlowType flow_type;
+    flow::Flow1D::FlowType flow_type;
     HeatTransfer heat_left;
     HeatTransfer heat_right;
   };
@@ -113,11 +113,11 @@ class IniData {
   void ProcessBoundaryData() {
     auto flow_type = [](const std::string& str) {
       if (str == "subsonic") {
-        return flow::FlowType::subsonic;
+        return flow::Flow1D::FlowType::subsonic;
       } else if (str == "sonic") {
-        return flow::FlowType::sonic;
+        return flow::Flow1D::FlowType::sonic;
       } else {
-        return flow::FlowType::supersonic;
+        return flow::Flow1D::FlowType::supersonic;
       };
     };
 

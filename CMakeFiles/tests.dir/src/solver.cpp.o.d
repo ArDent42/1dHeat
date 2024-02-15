@@ -338,4 +338,5 @@ CMakeFiles/tests.dir/src/solver.cpp.o: \
  /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/material.h \
  /usr/include/c++/11/set /usr/include/c++/11/bits/stl_set.h \
  /usr/include/c++/11/bits/stl_multiset.h /usr/include/c++/11/math.h \
+ /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/boundary_cond.h \
  /media/sergio/T7\ Shield/WorkSpace/1dTherm/src/log_duration.h
